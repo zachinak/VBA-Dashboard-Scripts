@@ -1,0 +1,65 @@
+Sub Macro1()
+'
+' Script used to pull and format emergency shelter utilization data for Tableau.
+'
+
+'
+Application.ScreenUpdating = False
+
+' Declaring the variables
+
+Dim runT As Double
+Dim s As String
+s = "Anchorage,BoS - Fairbanks,BoS - Juneau,BoS - Mat-Su Valley,BoS - Kodiak,BoS - Nome,Balance of State,All Communities"
+Dim arrComm() As String
+arrComm = Split(s, ",")
+
+' Writing the column headers
+
+    Sheets("Sheet1").Select
+    Range("A1").Offset(counter1, 0).Select
+    ActiveCell.FormulaR1C1 = "Community"
+    Selection.Offset(0, 1).Select
+    Selection.Formula = "Year"
+    Selection.Offset(0, 1).Select
+    Selection.Formula = "Month"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Average Client Count"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Average Bed Inventory"
+    
+    Sheets("Utilization").Select
+    Range("B1").Select
+    lastDate = Selection.Value
+daysInMonth = Day(DateSerial(Year(lastDate), Month(lastDate) + 1, 1) - 1)
+    
+    ' Counters to keep track of iterations
+        counter = 0
+        counter1 = 0
+    For c = LBound(arrComm) To UBound(arrComm)
+    
+    Sheets("Utilization").Select
+    Range("B2").Offset(counter, 0).Select
+    
+    For i = 1 To daysInMonth
+    runT = runT + Selection.Value
+        Selection.Offset(0, 1).Select
+    Next i
+    
+    
+'   Create the rows
+    Sheets("Sheet1").Select
+    Range("A2").Offset(counter1, 0).Select
+    ActiveCell.FormulaR1C1 = arrComm(c)
+    Selection.Offset(0, 1).Select
+    Selection.Formula = Year(lastDate)
+    Selection.Offset(0, 1).Select
+    Selection.Formula = Month(lastDate)
+    Selection.Offset(0, 1).Select
+    Selection.Formula = runT / daysInMonth
+    counter = counter + 2
+    counter1 = counter1 + 1
+    runT = 0
+    Next c
+    Application.ScreenUpdating = True
+End Sub

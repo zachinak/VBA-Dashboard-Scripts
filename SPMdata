@@ -1,0 +1,126 @@
+Sub Macro2()
+'
+' Macro used to pull and format homelessness system performance measure data from other excel files.
+'
+
+Application.ScreenUpdating = False
+
+' Declaring variables to properly format the file path
+
+Dim path As String
+
+quarter = Range("B2").Value & " " & Right(Range("A2").Value, 2)
+
+path = "'C:\Users\Zachary Burgess\OneDrive - Institute for Community Alliances\Dashboards\AK Dashboard Tableau\"
+metric1 = "\Metric 1\[" & quarter & ".xls]Tab A - Summary'!$A$2:$D$10,3,FALSE),0)"
+metric5 = "\Metric 5\[5 " & quarter & ".xls]NEW'!$A$1:$G$16,7,FALSE),0)"
+metric2 = "\Metric 2\[" & quarter & ".xls]Tab A - Summary'!$A$4:$J$10,3,FALSE),0)"
+metric21 = "\Metric 2\[" & quarter & ".xls]Tab A - Summary'!$A$4:$J$10,2,FALSE),0)"
+
+Dim s As String
+s = "Anchorage,Balance of State,All Communities"
+Dim arrComm() As String
+arrComm = Split(s, ",")
+
+    Range("A2", "B2").Select
+    Selection.Copy
+    Selection.End(xlDown).Select
+    
+    ' Iterate to pull number of new clients for each community
+    
+    For i = LBound(arrComm) To UBound(arrComm)
+
+'   New Clients
+    Selection.Offset(1, 0).Select
+    Selection.End(xlToLeft).Select
+    ActiveSheet.Paste
+    Selection.End(xlToRight).Select
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = arrComm(i)
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "All Programs"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "TOTAL"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "New Clients"
+    Selection.Offset(0, 1).Select
+    ActiveCell.Formula = "=IFERROR(VLOOKUP(INDIRECT(" & """E""" & "&ROW())," & path & arrComm(i) & metric5
+
+    Next i
+    
+For i = LBound(arrComm) To UBound(arrComm)
+
+'   Iterates to pull ES Length of stay.
+
+    Selection.Offset(1, 0).Select
+    Selection.End(xlToLeft).Select
+    ActiveSheet.Paste
+    Selection.End(xlToRight).Select
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = arrComm(i)
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Emergency Shelter (HUD)"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Persons in Emergency Shelter"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "ES Length of Stay"
+    Selection.Offset(0, 1).Select
+    ActiveCell.Formula = "=IFERROR(VLOOKUP(INDIRECT(" & """E""" & "&ROW())," & path & arrComm(i) & metric1
+    Selection.End(xlToLeft).Select
+    
+'   Iterates to pull TH Length of stay.
+
+    Selection.Offset(1, 0).Select
+
+    ActiveSheet.Paste
+    Selection.End(xlToRight).Select
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = arrComm(i)
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Transitional housing (HUD)"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Persons in Transitional Housing"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "TH Length of Stay"
+    Selection.Offset(0, 1).Select
+    ActiveCell.Formula = "=IFERROR(VLOOKUP(INDIRECT(" & """E""" & "&ROW())," & path & arrComm(i) & metric1
+    Selection.End(xlToLeft).Select
+    
+'   Iterates to pull RRH Length of stay.
+
+    Selection.Offset(1, 0).Select
+    ActiveSheet.Paste
+    Selection.End(xlToRight).Select
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = arrComm(i)
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "Rapid Rehousing (HUD)"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "In RRH"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "RRH Length of Time to Move In"
+    Selection.Offset(0, 1).Select
+    ActiveCell.Formula = "=IFERROR(VLOOKUP(INDIRECT(" & """E""" & "&ROW())," & path & arrComm(i) & metric1
+    Selection.End(xlToLeft).Select
+    
+'   Iterates to pull PSH Length of stay.
+
+    Selection.Offset(1, 0).Select
+    ActiveSheet.Paste
+    Selection.End(xlToRight).Select
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = arrComm(i)
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "PH - Permanent Supportive Housing (disability required for entry) (HUD)"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "In Permanent Housing"
+    Selection.Offset(0, 1).Select
+    ActiveCell.FormulaR1C1 = "PSH Length of Stay"
+    Selection.Offset(0, 1).Select
+    ActiveCell.Formula = "=IFERROR(VLOOKUP(INDIRECT(" & """E""" & "&ROW())," & path & arrComm(i) & metric1
+    Selection.End(xlToLeft).Select
+    Next i
+        
+ Application.ScreenUpdating = True
+ 
+End Sub
