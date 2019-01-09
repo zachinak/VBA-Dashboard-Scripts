@@ -1,6 +1,6 @@
 Sub Macro2()
 '
-' Macro used to pull and format homelessness system performance measure data from other excel files.
+' Script used to pull and format homelessness system performance measure data from other excel files.
 '
 
 Application.ScreenUpdating = False
